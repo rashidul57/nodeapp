@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest .",
-    "start": "nodemon --exec \"babel-node ./src/index.js\"",
+    "start": "nodemon --exec \"babel-node ./index.js\"",
     "startdist": "nodemon --exec \"node ./dist/main.js\"",
     "production": "NODE_ENV=production node --max_old_space=300 ./dist/main.js",
     "build": "webpack"
