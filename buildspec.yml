@@ -1,30 +1,19 @@
 version: 0.2
 
 phases:
-  install:
-    runtime-versions:
-      docker: 18
-      nodejs: 10
-
   pre_build:
     commands:
-      - echo Installing Dependencies
-      - npm install
-      - $(aws ecr get-login --no-include-email --region us-east-1.amazonaws.com/nodejs-demo:latest)
-
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --no-include-email --region $AWS_DEFAULT_REGION)
   build:
     commands:
-      - printf 'Testing'
-      - npm run test
-      - npm run build
+      - echo Build started on `date`
+      - echo Building the Docker image...          
       - docker build -t nodejs-demo:latest .
       - docker tag nodejs-demo:latest 406524075996.dkr.ecr.us-east-1.amazonaws.com/nodejs-demo:latest
   
   post_build:
     commands:
-      - echo Pushing the docker image
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
       - docker push 406524075996.dkr.ecr.us-east-1.amazonaws.com/nodejs-demo:latest
-      - printf '[{"name":"%s", "imageUri": "%s"}]' nodejs-demo 406524075996.dkr.ecr.us-east-1.amazonaws.com/nodejs-demo:latest > imagedefinitions.json
-
-  artifacts:
-    files: imagedefinitions.json
